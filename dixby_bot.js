@@ -31,7 +31,7 @@ console.log('Input: ' + input);
 
 
 // Function to get information about my last 20 tweets.
-var getTweets = function() {
+var getTweets = function(action) { // Add action parameter for do-what-it-says command.
   // Ensure the node npm twitter package is included to run this application.
   var Twitter = require('twitter');
   // Supply the developer keys to authorize usage of the twitter api / node npm package.
@@ -63,7 +63,7 @@ var getTweets = function() {
 
 
 // Function to get information about a specific song.
-var getSong = function() {
+var getSong = function(action, input) { // Add action and input parameters for do-what-it-says command.
   // If the user doesn't provide song input, they'll see information about 'The Sign' by Ace of Base.
   if(input === '') {
     input = 'The Sign';
@@ -95,7 +95,7 @@ var getSong = function() {
           for(var j = 0; j < data.tracks.items[i].album.artists.length; j++) {
           //console.log(data.tracks.items[i]);
           // Display the song data.
-          console.log('Song ' + [i + 1] + ' ----------------------------------');
+          console.log('--------------- Song ' + [i + 1] + ' ------------------');
           console.log('Artist:', data.tracks.items[i].album.artists[j].name);
           console.log('Song Name:', data.tracks.items[i].name);
           console.log('Preview Link:', data.tracks.items[i].preview_url);
@@ -110,7 +110,7 @@ var getSong = function() {
 
 
 // Function to get information about a specific movie.
-var getMovie = function() {
+var getMovie = function(action, input) { // Add action and input parameters for do-what-it-says command.
   // If the user doesn't provide movie input, they'll see information about 'Mr. Nobody.'
 	if(input === '') {
 		input = 'Mr. Nobody';
@@ -143,8 +143,7 @@ var getMovie = function() {
 
 
 
-
-
+// Execute functions corresponding to the action specified.
 switch (action) {
     case 'my-tweets':
         getTweets();
@@ -155,6 +154,36 @@ switch (action) {
     case 'movie-this':
         getMovie();
         break;
+    case 'do-what-it-says':
+        // Ensure the node file system package is included to run this application.
+        var fs = require('fs');
+        // Execute the readFile method passing it the path to the file, an option specifying the encoding, and the callback function.
+        fs.readFile('./random.txt', 'utf-8', function(error, data) {
+            if (error) {
+              // Print the error if one occurred.
+              console.log('Error occurred: ' + error);
+            }
+            //console.log(data);
+            // Convert a string object into an array of strings.
+            var dataArray = data.split(',');
+            //console.log('dataArray', dataArray);
+            // The first element in the array is stored in the action variable.
+            action = dataArray[0];
+            //console.log('DWIS Action:', action);
+            // The second element in the array is stored in the input variable.
+            input = dataArray[1];
+            //console.log('DWIS Input:', input);
+            if (action === 'my-tweets') {
+                getTweets(action);
+            }
+            if (action === 'spotify-this-song') {
+                getSong(action, input);
+            }
+            if (action === 'movie-this') {
+                getMovie(action, input);
+            }
+        });
+        break;
     default:
-        console.log('Please select another action!');
+        console.log('Please select a valid action!');
 }
