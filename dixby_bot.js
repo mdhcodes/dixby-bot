@@ -23,6 +23,10 @@ var processArgv = process.argv.slice(2);
 //console.log('processArgv', processArgv);
 var action = processArgv[0];
 //console.log('Action: ' + action);
+var input = processArgv.shift();
+input = processArgv.join(' ');
+console.log('Input: ' + input);
+
 
 // Function to get information about my last 20 tweets.
 var getTweets = function() {
@@ -56,9 +60,50 @@ var getTweets = function() {
 
 
 
+var getMovie = function() {
+
+	if(input === '') {
+		input = 'Mr. Nobody';
+	}
+
+	var request = require('request');
+	//var omdb = require('omdb');
+
+	var queryUrl = 'http://www.omdbapi.com/?t=' + input + '&tomatoes=true';
+
+	request(queryUrl, function (error, response, body) {
+		console.log('error:', error); // Print the error if one occurred
+		console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+		//console.log('body:', body); // Print the HTML for the Google homepage.
+
+    // JSON.parse() takes a string and converts it to a javaScript object.
+		var data = JSON.parse(body);
+
+		//console.log(data);
+		console.log('Movie Title:', data.Title);
+		console.log('Movie Year:', data.Year);
+		console.log(data.Ratings[0].Source + ' Rating: ' + data.Ratings[0].Value);
+		console.log('Country Produced:', data.Country);
+		console.log('Movie Language:', data.Language);
+		console.log('Movie Plot:', data.Plot);
+		console.log('Movie Actors:', data.Actors);
+		console.log(data.Ratings[1].Source + ' Rating: ' + data.Ratings[1].Value);
+		console.log('Rotten Tomatoes URL:', data.tomatoURL);
+
+	});
+
+};
+
+
+
+
+
 switch (action) {
     case 'my-tweets':
         getTweets();
+        break;
+    case 'movie-this':
+        getMovie();
         break;
     default:
         console.log('Please select another action!');
