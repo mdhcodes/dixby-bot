@@ -95,7 +95,7 @@ var getSong = function() {
               return;
           } // end error response
               // Display the song data.
-              console.log('--------- The Sign by Ace of Base ----------');
+              console.log('--------- The Sign by Ace of Base ---------');
               console.log('Artist:' + data.tracks.items[2].album.artists[0].name);
               console.log('Song Name:' + data.tracks.items[2].name);
               console.log('Preview Link:' + data.tracks.items[2].preview_url);
