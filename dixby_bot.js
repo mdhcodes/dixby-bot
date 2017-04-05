@@ -4,9 +4,6 @@
 // Get the data from keys.js and store the data in a variable named keys.
 var keys = require('./keys.js');
 
-// Ensure the node npm request package is included to run this application.
-var request = require('request');
-
 // Store user input with global variables.
 var processArgv = process.argv.slice(2);
 //console.log('processArgv', processArgv);
@@ -14,10 +11,12 @@ var processArgv = process.argv.slice(2);
 var action = processArgv[0];
 console.log('Action: ' + action);
 
+/*
+// The user will need to place quotes around the input.
 var input = processArgv[1];
 console.log('Input: ' + input);
+*/
 
-/*
 // The .shift() method will remove the first element from the process.argv array.
 // All other elements in the process.argv array will be stored in the variable named input.
 var input = processArgv.shift();
@@ -26,7 +25,7 @@ var input = processArgv.shift();
 // This will allow the user to type the movie and song input into the terminal without quotes.
 input = processArgv.join(' ');
 console.log('Input: ' + input);
-*/
+
 
 // String containing tweet, movie, or song data to be created and printed to the log.txt file.
 var log = '';
@@ -45,7 +44,7 @@ var fs = require('fs');
 
 
 // Function to get information about my last 20 tweets.
-var getTweets = function() { // Add action parameter for do-what-it-says command.
+var getTweets = function() {
     // Ensure the node npm twitter package is included to run this application.
     var Twitter = require('twitter');
     // Supply the developer keys to authorize usage of the twitter api / node npm package.
@@ -83,76 +82,80 @@ var getTweets = function() { // Add action parameter for do-what-it-says command
 
 
 // Function to get information about a specific song.
-var getSong = function(action, input) { // Add action and input parameters for do-what-it-says command.
-    // If the user doesn't provide song input, they'll see information about 'The Sign' by Ace of Base.
-    if (input === '') {
-        input = 'The Sign';
-        // Ensure the node npm spotify package is included to run this application.
-        var spotify = require('spotify');
-        // Execute the search method to access data from the spotify api.
-        spotify.search({ type: 'track', query: input }, function(error, data) {
-            if (error) {
-                console.log('Error occurred: ' + error);
-                return;
-            } // end error response
-            // Display the song data.
-            console.log('Artist:', data.tracks.items[2].album.artists[0].name);
-            console.log('Song Name:', data.tracks.items[2].name);
-            console.log('Preview Link:', data.tracks.items[2].preview_url);
-            console.log('Album Name:', data.tracks.items[2].album.name);
-            // Build a string to log data to the log.txt file.
-            log += '-- The Sign by Ace of Base --\n'
-            log += 'Artist: ' + data.tracks.items[2].album.artists[0].name + '\n';
-            log += 'Song Name: ' + data.tracks.items[2].name + '\n';
-            log += 'Preview Link: ' + data.tracks.items[2].preview_url + '\n';
-            log += 'Album Name: ' + data.tracks.items[2].album.name + '\n';
-            log += '-------------------------------\n';
-            // Execute the writeToFile() function to write song data to log.txt.
-            writeToFile();
-        });
-    } else { // end condition for no song input
-        // Ensure the node npm spotify package is included to run this application.
-        var spotify = require('spotify');
-        // Execute the search method to access data from the spotify api.
-        spotify.search({ type: 'track', query: input }, function(error, data) {
-            if (error) {
-                console.log('Error occurred: ' + error);
-                return;
-            } // end error response
-            //console.log('Songs', data.tracks.items[0]);
-            for (var i = 0; i < data.tracks.items.length; i++) {
-                for (var j = 0; j < data.tracks.items[i].album.artists.length; j++) {
-                    //console.log('Songs', data.tracks.items[i]);
-                    // Display the song data.
-                    console.log('---------------- Song ' + (i + 1) + ' ------------------');
-                    console.log('Artist:', data.tracks.items[i].album.artists[j].name);
-                    console.log('Song Name:', data.tracks.items[i].name);
-                    console.log('Preview Link:', data.tracks.items[i].preview_url);
-                    console.log('Album Name:', data.tracks.items[i].album.name);
-                    console.log('------------------------------------------' + '\n');
-                    // Build a string to log data to the log.txt file.
-                    log += '---------------- Song ' + (i + 1) + ' ------------------\n';
-                    log += 'Artist: ' + data.tracks.items[i].album.artists[j].name + '\n';
-                    log += 'Song Name: ' + data.tracks.items[i].name + '\n';
-                    log += 'Preview Link: ' + data.tracks.items[i].preview_url + '\n';
-                    log += 'Album Name: ' + data.tracks.items[i].album.name + '\n';
-                    log += '------------------------------------------\n';
-                } // end j for loop
-            } // end successful response and i for loop
-            // Execute the writeToFile() function to write song data to log.txt.
-            writeToFile();
-        }); // end spotify.search()
-    } // end successful response with song input
+var getSong = function() {
+  // If the user doesn't provide song input, they'll see information about 'The Sign' by Ace of Base.
+  if(!input) {
+      input = 'The Sign';
+      // Ensure the node npm spotify package is included to run this application.
+      var spotify = require('spotify');
+      // Execute the search method to access data from the spotify api.
+      spotify.search({ type: 'track', query: input }, function(error, data) {
+          if(error) {
+              console.log('Error occurred: ' + error);
+              return;
+          } // end error response
+              // Display the song data.
+              console.log('--------- The Sign by Ace of Base ----------');
+              console.log('Artist:' + data.tracks.items[2].album.artists[0].name);
+              console.log('Song Name:' + data.tracks.items[2].name);
+              console.log('Preview Link:' + data.tracks.items[2].preview_url);
+              console.log('Album Name:' + data.tracks.items[2].album.name);
+              console.log('-------------------------------------------' + '\n');
+              // Build a string to log data to the log.txt file.
+              log += '--------- The Sign by Ace of Base ----------\n';
+              log += 'Artist: ' + data.tracks.items[2].album.artists[0].name + '\n';
+              log += 'Song Name: ' + data.tracks.items[2].name + '\n';
+              log += 'Preview Link: ' + data.tracks.items[2].preview_url + '\n';
+              log += 'Album Name: ' + data.tracks.items[2].album.name + '\n';
+              log += '-------------------------------------------\n';
+              // Execute the writeToFile() function to write song data to log.txt.
+              writeToFile();
+          }); // end spotify.search()
+  } else { // end if(!input) condition and begin if(input) condition
+  // Ensure the node npm spotify package is included to run this application.
+  var spotify = require('spotify');
+  // Execute the search method to access data from the spotify api.
+  spotify.search({ type: 'track', query: input }, function(error, data) {
+      if (error) {
+          console.log('Error occurred: ' + error);
+          return;
+      } // end error response
+        //console.log('Songs', data.tracks.items[0]);
+        for (var i = 0; i < data.tracks.items.length; i++) {
+            for (var j = 0; j < data.tracks.items[i].album.artists.length; j++) {
+                //console.log('Songs', data.tracks.items[i]);
+                // Display the song data.
+                console.log('---------------- Song ' + (i + 1) + ' ------------------');
+                console.log('Artist:', data.tracks.items[i].album.artists[j].name);
+                console.log('Song Name:', data.tracks.items[i].name);
+                console.log('Preview Link:', data.tracks.items[i].preview_url);
+                console.log('Album Name:', data.tracks.items[i].album.name);
+                console.log('-------------------------------------------' + '\n');
+                // Build a string to log data to the log.txt file.
+                log += '---------------- Song ' + (i + 1) + ' ------------------\n';
+                log += 'Artist: ' + data.tracks.items[i].album.artists[j].name + '\n';
+                log += 'Song Name: ' + data.tracks.items[i].name + '\n';
+                log += 'Preview Link: ' + data.tracks.items[i].preview_url + '\n';
+                log += 'Album Name: ' + data.tracks.items[i].album.name + '\n';
+                log += '-------------------------------------------\n';
+            } // end j for loop
+        } // end successful response and i for loop
+        // Execute the writeToFile() function to write song data to log.txt.
+        writeToFile();
+    }); // end spotify.search()
+  } // end if(input) condition
 }; // end getSong()
 
 
 
 // Function to get information about a specific movie.
-var getMovie = function(action, input) { // Add action and input parameters for do-what-it-says command.
+var getMovie = function() {
     // If the user doesn't provide movie input, they'll see information about 'Mr. Nobody.'
-    if (input === '') {
+    if(!input) {
         input = 'Mr. Nobody';
     } // end condition for no movie input
+    // Ensure the node npm request package is included to run this application.
+    var request = require('request');
     // queryUrl to be used to access data from the OMDB api.
     var queryUrl = 'http://www.omdbapi.com/?t=' + input + '&tomatoes=true';
     // Execute request to access data from the OMDB api.
@@ -178,16 +181,16 @@ var getMovie = function(action, input) { // Add action and input parameters for 
         console.log('Rotten Tomatoes URL:', data.tomatoURL);
         // Build a string to log data to the log.txt file.
         log += '----------- Movie Info -----------\n'
-        log += 'Movie Title:' + data.Title + '\n';
-        log += 'Movie Year:' + data.Year + '\n';
+        log += 'Movie Title: ' + data.Title + '\n';
+        log += 'Movie Year: ' + data.Year + '\n';
         log += data.Ratings[0].Source + ' Rating: ' + data.Ratings[0].Value + '\n';
-        log += 'Country Produced:', data.Country + '\n';
-        log += 'Movie Language:', data.Language + '\n';
-        log += 'Movie Plot:', data.Plot + '\n';
-        log += 'Movie Actors:', data.Actors + '\n';
+        log += 'Country Produced: ' + data.Country + '\n';
+        log += 'Movie Language: ' + data.Language + '\n';
+        log += 'Movie Plot: ' + data.Plot + '\n';
+        log += 'Movie Actors: ' + data.Actors + '\n';
         log += data.Ratings[1].Source + ' Rating: ' + data.Ratings[1].Value + '\n';
-        log += 'Rotten Tomatoes URL:', data.tomatoURL + '\n';
-        log += '-------------------------------\n';
+        log += 'Rotten Tomatoes URL: ' + data.tomatoURL + '\n';
+        log += '---------------------------------\n';
         // Execute the writeToFile() function to write movie data to log.txt.
         writeToFile();
     }); // end successful response with movie input
