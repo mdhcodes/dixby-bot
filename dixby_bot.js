@@ -172,23 +172,34 @@ var getMovie = function() {
         // Display the movie data.
         console.log('Movie Title:', data.Title);
         console.log('Movie Year:', data.Year);
-        console.log(data.Ratings[0].Source + ' Rating: ' + data.Ratings[0].Value);
+
+        var ratingAtIndexZero = ( typeof data.Ratings !== "undefined" )
+                                  ? data.Ratings[0].Source + ' Rating: ' + data.Ratings[0].Value
+                                  : "Rating: Not Available";
+
+        console.log(ratingAtIndexZero);
+
         console.log('Country Produced:', data.Country);
         console.log('Movie Language:', data.Language);
         console.log('Movie Plot:', data.Plot);
         console.log('Movie Actors:', data.Actors);
-        console.log(data.Ratings[1].Source + ' Rating: ' + data.Ratings[1].Value);
+
+        var ratingAtIndexOne = ( typeof data.Ratings !== "undefined" )
+                                  ? data.Ratings[1].Source + ' Rating: ' + data.Ratings[1].Value
+                                  : "Rating: Not Available";
+
+        console.log(ratingAtIndexOne);
         console.log('Rotten Tomatoes URL:', data.tomatoURL);
         // Build a string to log data to the log.txt file.
-        log += '----------- Movie Info -----------\n'
+        log += '----------- Movie Info -----------\n';
         log += 'Movie Title: ' + data.Title + '\n';
         log += 'Movie Year: ' + data.Year + '\n';
-        log += data.Ratings[0].Source + ' Rating: ' + data.Ratings[0].Value + '\n';
+        log += ratingAtIndexZero + '\n';
         log += 'Country Produced: ' + data.Country + '\n';
         log += 'Movie Language: ' + data.Language + '\n';
         log += 'Movie Plot: ' + data.Plot + '\n';
         log += 'Movie Actors: ' + data.Actors + '\n';
-        log += data.Ratings[1].Source + ' Rating: ' + data.Ratings[1].Value + '\n';
+        log += ratingAtIndexOne + '\n';
         log += 'Rotten Tomatoes URL: ' + data.tomatoURL + '\n';
         log += '---------------------------------\n';
         // Execute the writeToFile() function to write movie data to log.txt.
